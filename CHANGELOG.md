@@ -4,6 +4,6 @@
 
 ## [Unreleased]
 
-## [2023.07.15]
+## [2023.7.15]
 ### Added
 - New feature Action to generate the files and package structure
