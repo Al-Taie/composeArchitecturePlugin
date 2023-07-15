@@ -1,0 +1,51 @@
+package ${PACKAGE_NAME}
+
+import androidx.navigation.NavController
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ${BASE_PACKAGE_NAME}.utils.extensions.Listen
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.event.${NAME}Event
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.state.${NAME}UiState
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.viewModel.${NAME}ViewModel
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.listener.${NAME}InteractionListener
+
+
+@Composable
+fun ${NAME}Screen(
+    viewModel: ${NAME}ViewModel,
+    navController: NavController
+) {
+    val state: ${NAME}UiState by viewModel.state.collectAsStateWithLifecycle()
+    val event: ${NAME}Event? by viewModel.event.collectAsState(null)
+    val listener: ${NAME}InteractionListener = viewModel
+
+    ${NAME}ScreenContent(
+        state = state,
+        listener = listener,
+    )
+
+    event?.Listen { currentEvent ->
+        when (currentEvent) {
+            else -> {}
+        }
+    }
+}
+
+
+@Composable
+private fun ${NAME}ScreenContent(
+    state: ${NAME}UiState = ${NAME}UiState(),
+    listener: ${NAME}InteractionListener = ${NAME}InteractionListener.${NAME}InteractionListenerPreview,
+) {
+
+}
+
+
+@Composable
+@Preview(name = "${NAME}Screen", showBackground = true, backgroundColor = 0xFFFF)
+private fun ${NAME}Preview() {
+    ${NAME}ScreenContent()
+}

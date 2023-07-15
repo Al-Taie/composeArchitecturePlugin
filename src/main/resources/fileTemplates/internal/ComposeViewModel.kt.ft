@@ -1,0 +1,16 @@
+package $PACKAGE_NAME
+
+import javax.inject.Inject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import ${BASE_PACKAGE_NAME}.base.BaseViewModel
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.event.${NAME}Event
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.state.${NAME}UiState
+import ${BASE_PACKAGE_NAME}.${FEATURE_NAME}.listener.${NAME}InteractionListener
+
+
+@HiltViewModel
+class ${NAME}ViewModel @Inject constructor(
+
+) : BaseViewModel<${NAME}UiState, ${NAME}Event>(${NAME}UiState()), ${NAME}InteractionListener {
+
+}

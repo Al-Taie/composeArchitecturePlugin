@@ -1,0 +1,8 @@
+package $PACKAGE_NAME
+
+
+sealed class ErrorState(open val message: String? = null) {
+    object NoInternet: ErrorState()
+    object UnAuthorized: ErrorState()
+    data class RequestFailed(override val message: String? = null): ErrorState(message)
+}

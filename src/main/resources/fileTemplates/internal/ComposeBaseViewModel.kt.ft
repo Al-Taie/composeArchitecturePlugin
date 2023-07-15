@@ -1,0 +1,96 @@
+package $PACKAGE_NAME
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+
+
+abstract class BaseViewModel<S, E>(initState: S) : ViewModel() {
+
+    protected val _state = MutableStateFlow(initState)
+    val state = _state.asStateFlow()
+
+    private val _event = MutableSharedFlow<E?>()
+    val event = _event.asSharedFlow()
+
+    protected fun <T> tryToExecute(
+        block: suspend () -> T,
+        onSuccess: (T) -> Unit,
+        onError: (ErrorState) -> Unit,
+        checkSuccess: (T) -> Boolean = { true },
+        inScope: CoroutineScope = viewModelScope
+    ): Job {
+        return inScope.launch(Dispatchers.IO) {
+            runCatching { block() }
+                .onSuccess { response ->
+                    if (checkSuccess(response)) {
+                        onSuccess(response)
+                        return@onSuccess
+                    }
+
+                    onError(ErrorState.RequestFailed())
+                }
+                .onFailure { mapExceptionToErrorState(throwable = it, onError = onError) }
+        }
+    }
+
+    protected fun <T> tryToCollect(
+        block: suspend () -> Flow<T>,
+        onNewValue: (T) -> Unit,
+        onError: (ErrorState) -> Unit,
+        inScope: CoroutineScope = viewModelScope
+    ): Job {
+        return inScope.launch(Dispatchers.IO) {
+            runCatching { block().collect(onNewValue) }
+                .onFailure { mapExceptionToErrorState(throwable = it, onError = onError) }
+        }
+    }
+
+    protected fun emitNewState(newState: S) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.emit(newState)
+        }
+    }
+
+    protected fun <T : E> emitNewEvent(newEvent: T) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _event.emit(newEvent)
+        }
+    }
+
+    inline fun <T> MutableStateFlow<T>.update(block: T.() -> T) {
+        while (true) {
+            val prevValue = value
+            val nextValue = block(prevValue)
+            if (compareAndSet(prevValue, nextValue))
+                return
+        }
+    }
+
+    protected fun launch(
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        block: suspend CoroutineScope.() -> Unit
+    ) = viewModelScope.launch(context = context, start = start, block = block)
+
+    private fun mapExceptionToErrorState(throwable: Throwable, onError: (ErrorState) -> Unit) {
+        with(throwable) {
+            when (this) {
+                // TODO (Handle your exceptions)
+                else -> ErrorState.RequestFailed().also { Timber.e(this) }
+            }.run(onError)
+        }
+    }
+}
