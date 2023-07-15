@@ -1,5 +1,3 @@
-# Compose Architecture Plugin
-
 ![Build](https://github.com/Al-Taie/composeArchitecturePlugin/workflows/Build/badge.svg)
 
 <!-- Plugin description -->
