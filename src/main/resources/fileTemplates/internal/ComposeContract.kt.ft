@@ -1,0 +1,9 @@
+package ${PACKAGE_NAME}
+
+
+interface ${NAME}Contract {    
+
+    object ${NAME}ContractPreview : ${NAME}Contract {
+            
+    }
+}

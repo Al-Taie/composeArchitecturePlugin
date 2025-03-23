@@ -4,6 +4,7 @@ import com.altaie.compose.plugin.core.BaseViewModel
 import com.altaie.compose.plugin.utils.PropertyKeys
 import com.altaie.compose.plugin.core.TemplateGenerator
 import com.altaie.compose.plugin.utils.getPackageName
+import com.altaie.compose.plugin.utils.isTrue
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.psi.PsiDirectory
@@ -21,12 +22,28 @@ class ComposeDialogViewModel(
     var name: String = ""
         get() = field.replaceFirstChar(Char::titlecase)
 
-    val successFlow = MutableSharedFlow<Unit>()
+    val stateFlow = MutableSharedFlow<ComposeDialogState>()
+    var createFeaturePackages: Boolean = false
 
-    var createFeaturePackages: Boolean = true
+    val properties: MutableMap<String, Any>
+        get() = mutableMapOf(
+            PropertyKeys.NAME to name,
+            PropertyKeys.FEATURE_NAME to name.replaceFirstChar(Char::lowercase),
+            PropertyKeys.BASE_PACKAGE_NAME to directory.getPackageName().orEmpty().replace(".features", ""),
+            PropertyKeys.FEATURES_PACKAGE_NAME to directory.getPackageName().orEmpty(),
+        )
 
     fun onOkButtonClick() {
-        application.runWriteAction {
+        application.runActionCatching(
+            onFailure = { emitState(ComposeDialogState.Error(message = it.message.orEmpty())) }
+        ) {
+            val packageName = directory.getPackageName()
+            val isWithinFeaturesDir = packageName?.endsWith("presentation.features").isTrue
+            if (isWithinFeaturesDir.not())
+                error("Not allowed! You should call it at [presentation/features] only.")
+
+            emitState(ComposeDialogState.Loading)
+
             val featPackage = directory.createSubdirectory(name.lowercase())
 
             if (createFeaturePackages)
@@ -37,51 +54,47 @@ class ComposeDialogViewModel(
 
             createUtils()
 
-            val properties = mutableMapOf<String, Any>(
-                PropertyKeys.NAME to name,
-                PropertyKeys.FEATURE_NAME to name.replaceFirstChar(Char::lowercase),
-                PropertyKeys.BASE_PACKAGE_NAME to directory.getPackageName().orEmpty(),
-            )
-
             val file = generator.generateKt(
                 templateName = "ComposeUiState",
                 fileName = "${name}UiState",
-                directory = featPackage.findSubdirectory("state") ?: featPackage,
+                directory = featPackage,
                 properties = properties
             )
 
             generator.generateKt(
                 templateName = "ComposeEvent",
                 fileName = "${name}Event",
-                directory = featPackage.findSubdirectory("event") ?: featPackage,
+                directory = featPackage,
                 properties = properties
             )
 
             generator.generateKt(
-                templateName = "ComposeInteractionListener",
-                fileName = "${name}InteractionListener",
-                directory = featPackage.findSubdirectory("listener") ?: featPackage,
+                templateName = "ComposeContract",
+                fileName = "${name}Contract",
+                directory = featPackage,
                 properties = properties
             )
 
             generator.generateKt(
                 templateName = "ComposeScreen",
                 fileName = "${name}Screen",
-                directory = featPackage.findSubdirectory("ui") ?: featPackage,
+                directory = featPackage,
                 properties = properties
             )
 
             generator.generateKt(
                 templateName = "ComposeViewModel",
                 fileName = "${name}ViewModel",
-                directory = featPackage.findSubdirectory("viewModel") ?: featPackage,
+                directory = featPackage,
                 properties = properties
             )
 
             editorManager.openFile(file.virtualFile, true)
-            scope.launch { successFlow.emit(Unit) }
+            emitState(ComposeDialogState.Success)
         }
     }
+
+    private fun emitState(state: ComposeDialogState) = scope.launch { stateFlow.emit(state) }
 
     private fun createPackages(featPackage: PsiDirectory) {
         val packages = listOf("event", "ui", "state", "viewModel", "listener")
@@ -93,27 +106,27 @@ class ComposeDialogViewModel(
     }
 
     private fun createBaseClasses() {
-        directory.parentDirectory?.createSubdirectory("base")?.let { base ->
+        directory.createSubdirectory("base").let { base ->
             generator.generateKt(
                 templateName = "ComposeErrorState",
                 fileName = "ErrorState",
                 directory = base,
-                properties = mutableMapOf()
+                properties = properties
             )
 
             generator.generateKt(
                 templateName = "ComposeBaseViewModel",
                 fileName = "BaseViewModel",
                 directory = base,
-                properties = mutableMapOf()
+                properties = properties
             )
         }
     }
 
     private fun createUtils() {
-        val utils = with(directory) {
+        val utils = directory.parentDirectory?.run {
             findSubdirectory("utils") ?: createSubdirectory("utils")
-        }
+        } ?: error("Cannot create utils package")
 
         val extensions = with(utils) {
             findSubdirectory("extensions") ?: createSubdirectory("extensions")
@@ -126,7 +139,12 @@ class ComposeDialogViewModel(
             templateName = "ComposeEventListener",
             fileName = "eventListener",
             directory = extensions,
-            properties = mutableMapOf()
+            properties = properties
         )
     }
 }
+
+private fun Application.runActionCatching(
+    onFailure: (Throwable) -> Unit,
+    runnable: Runnable
+) = runCatching { runWriteAction(runnable) }.onFailure(onFailure)

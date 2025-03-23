@@ -1,9 +1,0 @@
-package ${PACKAGE_NAME}
-
-
-interface ${NAME}InteractionListener {    
-
-    object ${NAME}InteractionListenerPreview : ${NAME}InteractionListener {
-            
-    }
-}

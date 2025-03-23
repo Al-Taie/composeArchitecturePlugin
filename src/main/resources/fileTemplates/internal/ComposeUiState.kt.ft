@@ -1,13 +1,13 @@
 package ${PACKAGE_NAME}
 
-import javax.annotation.concurrent.Immutable
-import ${BASE_PACKAGE_NAME}.base.ErrorState
+import androidx.compose.runtime.Immutable
+import ${FEATURES_PACKAGE_NAME}.base.ErrorState
 
 
 @Immutable
 data class ${NAME}UiState(
     val isLoading: Boolean = false,
-    val error: ErrorState? = null,
+    val error: ErrorState? = null
 ) {
     val isError: Boolean get() = error != null
 }
