@@ -16,7 +16,7 @@ fun ${NAME}Screen(
     val event: ${NAME}Event? by viewModel.event.collectAsState(null)
     val contract: ${NAME}Contract = viewModel
 
-    ${NAME}ScreenContent(
+    Content(
         state = state,
         contract = contract
     )
@@ -30,7 +30,7 @@ fun ${NAME}Screen(
 
 
 @Composable
-private fun ${NAME}ScreenContent(
+private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
     contract: ${NAME}Contract = ${NAME}Contract.${NAME}ContractPreview
 ) {
@@ -40,6 +40,6 @@ private fun ${NAME}ScreenContent(
 
 @Preview
 @Composable
-private fun ${NAME}Preview() {
+private fun Preview() {
     ${NAME}ScreenContent()
 }
