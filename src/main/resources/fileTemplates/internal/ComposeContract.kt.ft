@@ -3,7 +3,8 @@ package ${PACKAGE_NAME}
 
 interface ${NAME}Contract {    
 
-    object ${NAME}ContractPreview : ${NAME}Contract {
-            
-    }
+}
+
+fun default${NAME}Contract(): ${NAME}Contract  = object : ${NAME}Contract {
+
 }

@@ -2,9 +2,6 @@ package $PACKAGE_NAME
 
 import org.koin.core.annotation.Factory
 import ${FEATURES_PACKAGE_NAME}.base.BaseViewModel
-import ${FEATURES_PACKAGE_NAME}.${FEATURE_NAME}.${NAME}Event
-import ${FEATURES_PACKAGE_NAME}.${FEATURE_NAME}.${NAME}UiState
-import ${FEATURES_PACKAGE_NAME}.${FEATURE_NAME}.${NAME}Contract
 
 
 @Factory

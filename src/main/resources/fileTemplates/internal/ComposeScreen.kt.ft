@@ -32,7 +32,7 @@ fun ${NAME}Screen(
 @Composable
 private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
-    contract: ${NAME}Contract = ${NAME}Contract.${NAME}ContractPreview
+    contract: ${NAME}Contract = default${NAME}Contract()
 ) {
 
 }
@@ -41,5 +41,5 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() {
-    ${NAME}ScreenContent()
+    Content()
 }
