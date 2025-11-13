@@ -12,8 +12,8 @@ The **New Feature Dialog** is a convenient feature of the plugin that simplifies
 - `presentation/features/[featName]` - Package (lowercase) (optional)
   - `[FeatName]UiState` - This file contains the UIState, which serves as the main state holder for the screen.
   - `[FeatName]Screen` - An empty screen file with a preview, allowing you to quickly visualize the initial layout.
-  - `[FeatName]Event` - This file defines the events specific to your screen.
-  - `[FeatName]Contract` - A file responsible for controlling the UI logic and interactions of the screen.
+  - `[FeatName]Effect` - This file defines the effects specific to your screen.
+  - `[FeatName]Actions` - A file responsible for controlling the UI logic and interactions of the screen.
   - `[FeatName]ViewModel` - A basic implementation of the viewModel for your feature.
 
 In addition to the feature-specific files, the plugin also generates the following files as a foundation for your project:
