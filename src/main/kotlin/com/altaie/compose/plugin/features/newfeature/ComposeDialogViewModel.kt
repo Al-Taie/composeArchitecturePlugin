@@ -2,6 +2,7 @@ package com.altaie.compose.plugin.features.newfeature
 
 import com.altaie.compose.plugin.core.BaseViewModel
 import com.altaie.compose.plugin.core.TemplateGenerator
+import com.altaie.compose.plugin.settings.AppSettingsState
 import com.altaie.compose.plugin.utils.PropertyKeys
 import com.altaie.compose.plugin.utils.getPackageName
 import com.altaie.compose.plugin.utils.isTrue
@@ -16,7 +17,8 @@ class ComposeDialogViewModel(
     private val directory: PsiDirectory,
     private val generator: TemplateGenerator,
     private val editorManager: FileEditorManager,
-    private val application: Application
+    private val application: Application,
+    private val appSettingsState: AppSettingsState
 ) : BaseViewModel() {
 
     var name: String = ""
@@ -24,6 +26,7 @@ class ComposeDialogViewModel(
 
     val stateFlow = MutableSharedFlow<ComposeDialogState>()
     var createFeaturePackages: Boolean = false
+    var screenContent: ScreenContent = ScreenContent.EMPTY
 
     val properties: MutableMap<String, Any>
         get() = mutableMapOf(
@@ -76,7 +79,7 @@ class ComposeDialogViewModel(
             )
 
             generator.generateKt(
-                templateName = "ComposeScreen",
+                templateName = screenContent.templateName,
                 fileName = "${name}Screen",
                 directory = featPackage,
                 properties = properties
@@ -142,6 +145,12 @@ class ComposeDialogViewModel(
             properties = properties
         )
     }
+}
+
+enum class ScreenContent(val displayName: String, val templateName: String) {
+    EMPTY("Empty", "ComposeScreen"),
+    LIST("List", "ComposeListScreen"),
+    LAZY_LIST("LazyList", "ComposeLazyListScreen"),
 }
 
 private fun Application.runActionCatching(

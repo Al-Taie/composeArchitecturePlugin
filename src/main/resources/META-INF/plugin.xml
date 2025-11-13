@@ -22,22 +22,25 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
-    <!-- Extension points defined by the plugin.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
-
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+            displayName="Compose Architecture"
+            id="com.altaie.compose.plugin.settings.AppSettingsConfigurable"
+            instance="com.altaie.compose.plugin.settings.AppSettingsConfigurable" />
+        <applicationService
+            serviceImplementation="com.altaie.compose.plugin.settings.AppSettingsState" />
+    </extensions>
 
     <actions>
-
-        <group id="JetpackComposeGroup" text="Group">
-            <add-to-group group-id="NewGroup" anchor="first"/>
-            <action
-                    id="Compose.New"
-                    text="Compose Feature"
-                    icon="/icons/icon_small.svg"
-                    description="Creates compose architecture components"
-                    class="com.altaie.compose.plugin.features.newfeature.ComposeAction"/>
+        <group id="ComposeArchitecture" popup="false"
+            text="Compose Architecture">
+            <add-to-group anchor="first" group-id="NewGroup" />
+            <action class="com.altaie.compose.plugin.features.newfeature.ComposeAction"
+                description="Creates a new feature with the MVVM architecture."
+                id="Compose.NewFeature"
+                icon="/icons/icon_small.svg"
+                text="Compose Feature" />
         </group>
-
     </actions>
 
 </idea-plugin>

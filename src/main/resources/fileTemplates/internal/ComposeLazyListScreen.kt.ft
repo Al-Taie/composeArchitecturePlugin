@@ -1,0 +1,52 @@
+package ${PACKAGE_NAME}
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ${BASE_PACKAGE_NAME}.utils.extensions.listen
+import ${BASE_PACKAGE_NAME}.utils.preview.AppPreview
+
+
+@Composable
+fun ${NAME}Screen(
+    viewModel: ${NAME}ViewModel
+) {
+    val state: ${NAME}UiState by viewModel.state.collectAsStateWithLifecycle()
+
+    Content(
+        state = state,
+        contract = viewModel
+    )
+
+    viewModel.effect.listen { currentEffect ->
+        when (currentEffect) {
+            else -> {}
+        }
+    }
+}
+
+@Composable
+private fun Content(
+    state: ${NAME}UiState = ${NAME}UiState(),
+    contract: ${NAME}Actions = default${NAME}Actions()
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // TODO: Add list items here
+    }
+}
+
+@Composable
+@AppPreview
+private fun Preview() {
+    Content()
+}

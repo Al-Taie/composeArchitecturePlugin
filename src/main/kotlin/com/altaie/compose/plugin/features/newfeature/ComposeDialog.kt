@@ -6,6 +6,8 @@ import com.intellij.openapi.progress.util.ProgressWindow
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.Messages
+import com.intellij.ui.dsl.builder.bindItem
+import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.whenTextChangedFromUi
 import kotlinx.coroutines.flow.launchIn
@@ -28,7 +30,14 @@ class ComposeDialog(
         myParentWindow = null
     )
 
+    private var selectedScreenContent: ScreenContent?
+        get() = viewModel.screenContent
+        set(value) {
+            viewModel.screenContent = value ?: ScreenContent.EMPTY
+        }
+
     init {
+        title = "New Jetpack Compose Feature"
         init()
         viewModel
             .stateFlow
@@ -52,24 +61,24 @@ class ComposeDialog(
 
     override fun createPanel(): DialogPanel {
         return panel {
-            row {
-                label(text = "New Jetpack Compose Feature")
+            row("Feature Name:") {
                 textField()
                     .whenTextChangedFromUi {
                         viewModel.name = it
                     }
                     .focused()
             }
+            row("Screen Content") {
+                comboBox(items = ScreenContent.entries) { _, value, _, _, _ ->
+                    text(value?.displayName.toString()).component
+                }.bindItem(::selectedScreenContent)
+            }
 
-//            row {
-//                label(text = "Options")
-//            }
-//
-//            row {
-//                checkBox(
-//                    text = "Create packages",
-//                ).bindSelected(viewModel::createFeaturePackages)
-//            }
+            row {
+                checkBox(
+                    text = "Create packages",
+                ).bindSelected(viewModel::createFeaturePackages)
+            }
         }
     }
 
