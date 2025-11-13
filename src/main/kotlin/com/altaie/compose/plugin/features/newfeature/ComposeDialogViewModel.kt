@@ -69,8 +69,8 @@ class ComposeDialogViewModel(
             )
 
             generator.generateKt(
-                templateName = "ComposeContract",
-                fileName = "${name}Contract",
+                templateName = "ComposeActions",
+                fileName = "${name}Actions",
                 directory = featPackage,
                 properties = properties
             )
