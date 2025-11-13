@@ -2,10 +2,9 @@ package ${PACKAGE_NAME}
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import ${BASE_PACKAGE_NAME}.utils.extensions.Listen
+import ${BASE_PACKAGE_NAME}.utils.extensions.listen
+import ${BASE_PACKAGE_NAME}.utils.preview.AppPreview
 
 
 @Composable
@@ -19,13 +18,12 @@ fun ${NAME}Screen(
         contract = viewModel
     )
 
-    viewModel.effect.Listen { currentEffect ->
+    viewModel.effect.listen { currentEffect ->
         when (currentEffect) {
             else -> {}
         }
     }
 }
-
 
 @Composable
 private fun Content(
@@ -35,9 +33,8 @@ private fun Content(
 
 }
 
-
-@Preview
 @Composable
+@AppPreview
 private fun Preview() {
     Content()
 }

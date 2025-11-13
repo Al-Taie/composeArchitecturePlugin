@@ -1,10 +1,12 @@
 package $PACKAGE_NAME
 
-import org.koin.core.annotation.Factory
+import androidx.compose.runtime.Stable
+import org.koin.android.annotation.KoinViewModel
 import ${FEATURES_PACKAGE_NAME}.base.BaseViewModel
 
 
-@Factory
+@Stable
+@KoinViewModel
 class ${NAME}ViewModel(
 
 ) : BaseViewModel<${NAME}UiState, ${NAME}Effect>(${NAME}UiState()), ${NAME}Actions {

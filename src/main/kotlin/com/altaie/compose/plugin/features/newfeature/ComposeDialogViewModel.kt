@@ -97,7 +97,7 @@ class ComposeDialogViewModel(
     private fun emitState(state: ComposeDialogState) = scope.launch { stateFlow.emit(state) }
 
     private fun createPackages(featPackage: PsiDirectory) {
-        val packages = listOf("effect", "ui", "state", "viewModel", "listener")
+        val packages = listOf("effect", "ui", "state", "viewModel", "action")
         packages.forEach(featPackage::createSubdirectory)
 
         featPackage.findSubdirectory("ui")
@@ -132,12 +132,12 @@ class ComposeDialogViewModel(
             findSubdirectory("extensions") ?: createSubdirectory("extensions")
         }
 
-        if (extensions.findFile("effectListener.kt") != null)
+        if (extensions.findFile("effectListenerExt.kt") != null)
             return
 
         generator.generateKt(
             templateName = "ComposeEffectListener",
-            fileName = "effectListener",
+            fileName = "effectListenerExt",
             directory = extensions,
             properties = properties
         )
