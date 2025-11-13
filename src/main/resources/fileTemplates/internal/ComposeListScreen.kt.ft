@@ -21,7 +21,7 @@ fun ${NAME}Screen(
 
     Content(
         state = state,
-        contract = viewModel
+        actions = viewModel
     )
 
     viewModel.effect.listen { currentEffect ->
@@ -34,7 +34,7 @@ fun ${NAME}Screen(
 @Composable
 private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
-    contract: ${NAME}Actions = default${NAME}Actions()
+    actions: ${NAME}Actions = default${NAME}Actions()
 ) {
     Column(
         modifier = Modifier
