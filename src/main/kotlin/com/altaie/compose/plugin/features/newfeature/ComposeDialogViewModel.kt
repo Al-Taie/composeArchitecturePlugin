@@ -72,8 +72,8 @@ class ComposeDialogViewModel(
             )
 
             generator.generateKt(
-                templateName = "ComposeActions",
-                fileName = "${name}Actions",
+                templateName = "ComposeAction",
+                fileName = "${name}Action",
                 directory = featPackage,
                 properties = properties
             )

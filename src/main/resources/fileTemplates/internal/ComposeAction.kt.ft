@@ -1,0 +1,13 @@
+package ${PACKAGE_NAME}
+
+import androidx.compose.runtime.Stable
+
+
+@Stable
+interface ${NAME}Action {
+
+}
+
+internal fun default${NAME}Action(): ${NAME}Action  = object : ${NAME}Action {
+
+}

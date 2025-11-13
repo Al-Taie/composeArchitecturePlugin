@@ -21,7 +21,7 @@ fun ${NAME}Screen(
 
     Content(
         state = state,
-        actions = viewModel
+        action = viewModel
     )
 
     viewModel.effect.listen { currentEffect ->
@@ -34,7 +34,7 @@ fun ${NAME}Screen(
 @Composable
 private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
-    actions: ${NAME}Actions = default${NAME}Actions()
+    action: ${NAME}Action = default${NAME}Action()
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
