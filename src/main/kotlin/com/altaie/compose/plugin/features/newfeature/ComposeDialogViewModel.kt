@@ -1,8 +1,8 @@
 package com.altaie.compose.plugin.features.newfeature
 
 import com.altaie.compose.plugin.core.BaseViewModel
-import com.altaie.compose.plugin.utils.PropertyKeys
 import com.altaie.compose.plugin.core.TemplateGenerator
+import com.altaie.compose.plugin.utils.PropertyKeys
 import com.altaie.compose.plugin.utils.getPackageName
 import com.altaie.compose.plugin.utils.isTrue
 import com.intellij.openapi.application.Application
@@ -62,8 +62,8 @@ class ComposeDialogViewModel(
             )
 
             generator.generateKt(
-                templateName = "ComposeEvent",
-                fileName = "${name}Event",
+                templateName = "ComposeEffect",
+                fileName = "${name}Effect",
                 directory = featPackage,
                 properties = properties
             )
@@ -97,7 +97,7 @@ class ComposeDialogViewModel(
     private fun emitState(state: ComposeDialogState) = scope.launch { stateFlow.emit(state) }
 
     private fun createPackages(featPackage: PsiDirectory) {
-        val packages = listOf("event", "ui", "state", "viewModel", "listener")
+        val packages = listOf("effect", "ui", "state", "viewModel", "listener")
         packages.forEach(featPackage::createSubdirectory)
 
         featPackage.findSubdirectory("ui")
@@ -132,12 +132,12 @@ class ComposeDialogViewModel(
             findSubdirectory("extensions") ?: createSubdirectory("extensions")
         }
 
-        if (extensions.findFile("eventListener.kt") != null)
+        if (extensions.findFile("effectListener.kt") != null)
             return
 
         generator.generateKt(
-            templateName = "ComposeEventListener",
-            fileName = "eventListener",
+            templateName = "ComposeEffectListener",
+            fileName = "effectListener",
             directory = extensions,
             properties = properties
         )

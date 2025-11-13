@@ -13,16 +13,14 @@ fun ${NAME}Screen(
     viewModel: ${NAME}ViewModel
 ) {
     val state: ${NAME}UiState by viewModel.state.collectAsStateWithLifecycle()
-    val event: ${NAME}Event? by viewModel.event.collectAsState(null)
-    val contract: ${NAME}Contract = viewModel
 
     Content(
         state = state,
-        contract = contract
+        contract = viewModel
     )
 
-    event?.Listen { currentEvent ->
-        when (currentEvent) {
+    viewModel.effect.Listen { currentEffect ->
+        when (currentEffect) {
             else -> {}
         }
     }
@@ -32,7 +30,7 @@ fun ${NAME}Screen(
 @Composable
 private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
-    contract: ${NAME}Contract = default${NAME}Contract()
+    contract: ${NAME}Actions = default${NAME}Actions()
 ) {
 
 }

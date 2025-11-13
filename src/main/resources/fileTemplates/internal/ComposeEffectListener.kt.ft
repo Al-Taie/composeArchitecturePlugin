@@ -1,0 +1,39 @@
+package $PACKAGE_NAME
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNotNull
+
+
+@Composable
+internal fun <E> Flow<E>.listen(
+    onEach: CoroutineScope.(currentEvent: E) -> Unit
+) = listenImplementation(onEach = onEach)
+
+@Composable
+internal inline fun <reified E> Flow<Any?>.listen(
+    noinline onEach: E.() -> Unit
+) = listenImplementation(onEach = { effect -> onEach(effect as E) }) { filterIsInstance<E>() }
+
+@Composable
+private fun <E> Flow<E?>.listenImplementation(
+    onEach: CoroutineScope.(currentEvent: E) -> Unit,
+    transform: Flow<E?>.() -> Flow<E?> = { this },
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val handleEffect by rememberUpdatedState(newValue = onEach)
+
+    LaunchedEffect(key1 = lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            transform().filterNotNull().collect { effect -> handleEffect(effect) }
+        }
+    }
+}

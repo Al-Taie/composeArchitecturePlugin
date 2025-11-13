@@ -1,0 +1,10 @@
+package ${PACKAGE_NAME}
+
+
+interface ${NAME}Actions {
+
+}
+
+fun default${NAME}Actions(): ${NAME}Actions  = object : ${NAME}Actions {
+
+}

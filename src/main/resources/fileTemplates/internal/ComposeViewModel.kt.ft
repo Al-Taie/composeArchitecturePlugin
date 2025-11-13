@@ -7,6 +7,6 @@ import ${FEATURES_PACKAGE_NAME}.base.BaseViewModel
 @Factory
 class ${NAME}ViewModel(
 
-) : BaseViewModel<${NAME}UiState, ${NAME}Event>(${NAME}UiState()), ${NAME}Contract {
+) : BaseViewModel<${NAME}UiState, ${NAME}Effect>(${NAME}UiState()), ${NAME}Actions {
 
 }

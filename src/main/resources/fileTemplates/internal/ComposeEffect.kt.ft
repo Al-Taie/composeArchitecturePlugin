@@ -1,6 +1,6 @@
 package ${PACKAGE_NAME}
 
 
-sealed interface ${NAME}Event {
+sealed interface ${NAME}Effect {
     
 }
