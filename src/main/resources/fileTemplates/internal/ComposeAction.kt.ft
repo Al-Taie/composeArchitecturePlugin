@@ -5,9 +5,9 @@ import androidx.compose.runtime.Stable
 
 @Stable
 interface ${NAME}Action {
-
+    fun navigateBack()
 }
 
 internal fun default${NAME}Action(): ${NAME}Action  = object : ${NAME}Action {
-
+    override fun navigateBack() = Unit
 }

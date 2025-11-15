@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-import ${BASE_PACKAGE_NAME}.utils.extensions.e
+import ${BASE_PACKAGE_NAME}.presentation.utils.extensions.e
 
 
 abstract class BaseViewModel<S, E>(initState: S) : ViewModel() {

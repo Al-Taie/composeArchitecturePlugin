@@ -1,16 +1,15 @@
 package ${PACKAGE_NAME}
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ${BASE_PACKAGE_NAME}.presentation.design.components.containers.AppContainer
+import ${BASE_PACKAGE_NAME}.presentation.design.components.buttons.NavigationButtons
 import ${BASE_PACKAGE_NAME}.presentation.utils.extensions.listen
 import ${BASE_PACKAGE_NAME}.presentation.utils.preview.AppPreview
+import ${BASE_PACKAGE_NAME}.R as Res
 
 
 @Composable
@@ -26,6 +25,7 @@ fun ${NAME}Screen(
 
     viewModel.effect.listen { currentEffect ->
         when (currentEffect) {
+            ${NAME}Effect.NavigateBack -> Unit // TODO(Implement navigation back)
             else -> {}
         }
     }
@@ -36,12 +36,20 @@ private fun Content(
     state: ${NAME}UiState = ${NAME}UiState(),
     action: ${NAME}Action = default${NAME}Action()
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // TODO: Add list items here
+    AppContainer(
+        title = Res.string.title.string,
+        onBackClick = action::navigateBack,
+        bottomBar = {
+            NavigationButtons(
+                textPrimary = Res.string.action.string,
+                textSecondary = Res.string.action_back.string,
+                modifier = Modifier.padding(horizontal = AppTheme.sizes.medium),
+                onPrimaryClick = {},
+                onSecondaryClick = action::navigateBack
+            )
+        }
+    ) { paddingValues ->
+        // TODO: Add ${NAME}Screen content
     }
 }
 

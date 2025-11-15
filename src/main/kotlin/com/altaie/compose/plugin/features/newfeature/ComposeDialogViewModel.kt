@@ -32,7 +32,7 @@ class ComposeDialogViewModel(
         get() = mutableMapOf(
             PropertyKeys.NAME to name,
             PropertyKeys.FEATURE_NAME to name.replaceFirstChar(Char::lowercase),
-            PropertyKeys.BASE_PACKAGE_NAME to directory.getPackageName().orEmpty().replace(".features", ""),
+            PropertyKeys.BASE_PACKAGE_NAME to directory.getPackageName().orEmpty().replace(".presentation.features", ""),
             PropertyKeys.FEATURES_PACKAGE_NAME to directory.getPackageName().orEmpty(),
         )
 
@@ -151,6 +151,7 @@ enum class ScreenContent(val displayName: String, val templateName: String) {
     EMPTY("Empty", "ComposeScreen"),
     LIST("List", "ComposeListScreen"),
     LAZY_LIST("LazyList", "ComposeLazyListScreen"),
+    CONTAINER("Container", "ComposeAppContainerScreen"),
 }
 
 private fun Application.runActionCatching(

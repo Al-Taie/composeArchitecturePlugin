@@ -2,5 +2,5 @@ package ${PACKAGE_NAME}
 
 
 sealed interface ${NAME}Effect {
-    
+    data object NavigateBack : ${NAME}Effect
 }

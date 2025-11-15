@@ -3,14 +3,13 @@ package ${PACKAGE_NAME}
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import ${BASE_PACKAGE_NAME}.utils.extensions.listen
-import ${BASE_PACKAGE_NAME}.utils.preview.AppPreview
+import ${BASE_PACKAGE_NAME}.presentation.utils.extensions.listen
+import ${BASE_PACKAGE_NAME}.presentation.utils.preview.AppPreview
 
 
 @Composable
