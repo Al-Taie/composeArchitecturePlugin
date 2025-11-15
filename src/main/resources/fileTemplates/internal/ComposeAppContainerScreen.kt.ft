@@ -49,7 +49,15 @@ private fun Content(
             )
         }
     ) { paddingValues ->
-        // TODO: Add ${NAME}Screen content
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(AppTheme.sizes.medium)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(space = AppTheme.sizes.small)
+        ) {
+            // TODO: Add ${NAME}Screen content
+        }
     }
 }
 
